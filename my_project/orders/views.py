@@ -1,12 +1,16 @@
 from multiprocessing import context
-from unicodedata import name
+
 from django.template import loader
 from django import template
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
+
+
 from .models import Orders
 from .forms import OrderForm
+from customer.forms import CustomerForm
+from customer.models import Customer
 
 
 def orders(request):
@@ -16,13 +20,19 @@ def orders(request):
     }
     template = loader.get_template('base/orders.html')
 
-    print('----')
+    # print('-------------------')
     
-    print(orders)
+    # print(orders)
     return HttpResponse(template.render(context, request))
 
 
-def add_order(request):
+def add_order(request, customer_id):
+    customer = Customer.objects.get(pk=customer_id)
+    form = CustomerForm(instance=customer)
+    context = {
+        'form': form,
+        'customer' : customer,
+    }
     form = OrderForm(request.POST or None)
     if form.is_valid():
         form.save()
@@ -30,9 +40,13 @@ def add_order(request):
     context = {
         'form' : form
     }
+    # print(customer)
     return render(request, 'base/add_order.html', context)
 
 def insert(request):
+   customer = request.POST.get('customer')
+   customer = Customer()
+   customer.save()
    name = request.POST.get('name')
    quantity = request.POST.get('quantity')
    order = Orders()
@@ -40,8 +54,8 @@ def insert(request):
    order.quantity = quantity
    order.save()
 
-   print("---------------------------------------")
-   print("name: {name} quantity: {quantity}")
+#    print(customer)
+   
 
    return redirect('orders')
 
