@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %} {% block content %}
+
+<h1>Add order</h1>
+
+<form action="insert/" method="post">
+  {% csrf_token %} Order Name:<br />
+  <input name="order" />
+  <br /><br />
+  Quantity:<br />
+  <input name="quantity" />
+  <br /><br />
+  <input type="submit" value="Submit" />
+</form>
+{% endblock content %}
