@@ -3,19 +3,8 @@
 <h1>Add order</h1>
 
 <form action="insert/" method="post">
-  {% csrf_token %} Customer:<br />
+  {% csrf_token %} {{form.as_p}} <br />
 
-  <select name="customer" id="customer">
-    <option value="{{customer}}">{{customer}}</option>
-  </select>
-
-  <br />
-  Order Name:<br />
-  <input name="name" />
-  <br /><br />
-  Quantity:<br />
-  <input name="quantity" />
-  <br /><br />
   <input type="submit" value="Submit" />
 </form>
 {% endblock content %}

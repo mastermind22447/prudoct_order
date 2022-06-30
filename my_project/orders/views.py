@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 
 
+
 from .models import Orders
 from .forms import OrderForm
 from customer.forms import CustomerForm
@@ -26,21 +27,16 @@ def orders(request):
     return HttpResponse(template.render(context, request))
 
 
-def add_order(request, customer_id):
-    customer = Customer.objects.get(pk=customer_id)
-    form = CustomerForm(instance=customer)
-    context = {
-        'form': form,
-        'customer' : customer,
-    }
+def add_order(request):
     form = OrderForm(request.POST or None)
     if form.is_valid():
         form.save()
     
     context = {
         'form' : form
+        
     }
-    # print(customer)
+    
     return render(request, 'base/add_order.html', context)
 
 def insert(request):
