@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %} {% block content %}
+<div class="container">
+  <h1>{{customer.name}}</h1>
+  <table class="table table-dark table-striped table text-center">
+    <thead>
+      <tr class="table-dark">
+        <th scope="col">Order</th>
+        <th scope="col">Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr class="table-dark">
+        <td colspan="1" class="table-active">{{order.name}}</td>
+        <td colspan="1" class="table-active">{{order.quantity}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{%endblock%}

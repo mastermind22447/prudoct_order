@@ -1,17 +1,14 @@
-from multiprocessing import context
 
+from multiprocessing import context
+from re import template
 from django.template import loader
-from django import template
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.urls import reverse
-
-
 
 from .models import Orders
-from .forms import OrderForm
-from customer.forms import CustomerForm
 from customer.models import Customer
+
+from pprint import pp, pprint
 
 
 def orders(request):
@@ -21,40 +18,72 @@ def orders(request):
     }
     template = loader.get_template('base/orders.html')
 
-    # print('-------------------')
-    
-    # print(orders)
     return HttpResponse(template.render(context, request))
 
 
 def add_order(request):
-    form = OrderForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-    
+    cs = Customer.objects.all()
     context = {
-        'form' : form
-        
+        'cs': cs
     }
-    
     return render(request, 'base/add_order.html', context)
 
-def insert(request):
-   customer = request.POST.get('customer')
-   customer = Customer()
-   customer.save()
-   name = request.POST.get('name')
-   quantity = request.POST.get('quantity')
-   order = Orders()
-   order.name = name
-   order.quantity = quantity
-   order.save()
-
-#    print(customer)
-   
-
-   return redirect('orders')
+def insert_order(request):
+    name = request.POST.get('order_name')
+    c_id = request.POST.get('customer')
+    quantity = request.POST.get('order_quantity')
+    order = Orders()
+    order.customer_id = c_id
+    order.name = name
+    order.quantity = quantity
+    order.save()
+    return redirect('orders')
 
 
-def completed_orders():
+def order_detail(request, order_id):
+    orders = Orders.objects.get(pk=order_id)
+    template = loader.get_template('base/order_detail.html')
+    context ={
+        'orders' : orders
+    }
+    return HttpResponse(template.render(context, request))
+
+def customer_detail(request, customer_id):
+    customer = Customer.objects.get(pk=customer_id)
+    orders = Orders.objects.filter(customer_id=customer)
+    template = loader.get_template('base/customer_detail.html')
+    context = {
+        'customer' : customer,
+        'orders' : orders,
+    }
+    
+    return HttpResponse(template.render(context, request))
+
+def edit_order(request, order_id):
+    order = Orders.objects.get(pk=order_id)
+    context ={
+        'order' : order
+    }
+    template = loader.get_template('base/edit_order.html')
+    return HttpResponse(template.render(context, request))
+
+
+def update_order(request, order_id):
+    order = Orders.objects.get(pk=order_id)
+    name = request.POST.get('order_name')
+    quantity = request.POST.get('order_quantity')
+    # Pashmam az in khat code!!!!!
+    order.isOrders = True
+    order.name = name
+    order.quantity = quantity
+    order.save()
+    return redirect('orders')
+
+def delete_order(request, order_id):
+    order = Orders.objects.filter(id=order_id).delete()
+    return redirect('orders')
+
+
+
+# def completed_orders():
     return
