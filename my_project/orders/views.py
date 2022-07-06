@@ -1,14 +1,11 @@
-
-from multiprocessing import context
-from re import template
+from collections import _OrderedDictKeysView
 from django.template import loader
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
 from .models import Orders
 from customer.models import Customer
-
 from pprint import pp, pprint
+from django.db.models import Sum
 
 
 def orders(request):
@@ -52,10 +49,17 @@ def customer_detail(request, customer_id):
     customer = Customer.objects.get(pk=customer_id)
     orders = Orders.objects.filter(customer_id=customer)
     template = loader.get_template('base/customer_detail.html')
+    order_numb = orders.aggregate(Sum("quantity"))
     context = {
         'customer' : customer,
         'orders' : orders,
+        'order_numb' : order_numb,
     }
+    
+    pprint(order_numb)
+    # for key in customer.quantity:
+        # order_numb = int(customer[quantity])
+    
     
     return HttpResponse(template.render(context, request))
 
