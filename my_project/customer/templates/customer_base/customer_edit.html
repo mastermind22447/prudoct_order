@@ -1,0 +1,18 @@
+{% extends 'customer_base/customer_base.html' %} {% block content %}
+<div class="form-floating container">
+  <h1>Edit : {{customer.name}}</h1>
+  <form action="/customer/update_customer/{{customer.id}}/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="exampleInputEmail1">Name: </label>
+      <input
+        type="text"
+        class="form-control"
+        value="{{customer.name}}"
+        name="customer_name"
+      />
+    </div>
+    <input class="btn btn-primary" type="submit" value="Submit" />
+  </form>
+</div>
+{%endblock%}

@@ -1,18 +1,11 @@
-{% extends 'base/base.html' %} {% block content %}
+{% extends 'order_base/orders_base.html' %} {% block content %}
 <div class="form-floating container">
-  <h1>{{order.name}}</h1>
+  <h1>Edit : {{order.name}}</h1>
   <form action="/orders/update_order/{{order.id}}/" method="post">
     {% csrf_token %}
     <div class="form-group">
       <label for="exampleInputEmail1">Customer: </label>
-      <input
-        type="text"
-        class="form-control"
-        value="{{order.customer}}"
-        name="order_customer"
-      />
-    </div>
-
+      <span type="text" name="order_customer">{{order.customer}}</span>
     <div class="form-group">
       <label for="exampleInputEmail1">Name: </label>
       <input

@@ -1,0 +1,13 @@
+{% extends 'customer_base/customer_base.html' %} {% block content %}
+<div class="form-floating container">
+  <h1>Add Customer</h1>
+  <form action="insert/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="exampleInputEmail1">Name: </label>
+      <input type="text" class="form-control" name="customer_name" />
+    </div>
+    <input class="btn btn-primary" type="submit" value="Submit" />
+  </form>
+</div>
+{%endblock%}

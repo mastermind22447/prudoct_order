@@ -1,4 +1,3 @@
-from collections import _OrderedDictKeysView
 from django.template import loader
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -13,7 +12,7 @@ def orders(request):
     context = {
         "orders" : orders,
     }
-    template = loader.get_template('base/orders.html')
+    template = loader.get_template('order_base/orders.html')
 
     return HttpResponse(template.render(context, request))
 
@@ -23,7 +22,7 @@ def add_order(request):
     context = {
         'cs': cs
     }
-    return render(request, 'base/add_order.html', context)
+    return render(request, 'order_base/add_order.html', context)
 
 def insert_order(request):
     name = request.POST.get('order_name')
@@ -38,29 +37,21 @@ def insert_order(request):
 
 
 def order_detail(request, order_id):
-    orders = Orders.objects.get(pk=order_id)
-    template = loader.get_template('base/order_detail.html')
+    order = Orders.objects.get(pk=order_id)
+    template = loader.get_template('order_base/order_detail.html')
     context ={
-        'orders' : orders
+        'order' : order
     }
     return HttpResponse(template.render(context, request))
 
 def customer_detail(request, customer_id):
-    customer = Customer.objects.get(pk=customer_id)
-    orders = Orders.objects.filter(customer_id=customer)
-    template = loader.get_template('base/customer_detail.html')
+    orders = Orders.objects.filter(customer_id=customer_id)
+    template = loader.get_template('order_base/customer_detail.html')
     order_numb = orders.aggregate(Sum("quantity"))
     context = {
-        'customer' : customer,
         'orders' : orders,
         'order_numb' : order_numb,
     }
-    
-    pprint(order_numb)
-    # for key in customer.quantity:
-        # order_numb = int(customer[quantity])
-    
-    
     return HttpResponse(template.render(context, request))
 
 def edit_order(request, order_id):
@@ -68,7 +59,7 @@ def edit_order(request, order_id):
     context ={
         'order' : order
     }
-    template = loader.get_template('base/edit_order.html')
+    template = loader.get_template('order_base/edit_order.html')
     return HttpResponse(template.render(context, request))
 
 
@@ -76,8 +67,6 @@ def update_order(request, order_id):
     order = Orders.objects.get(pk=order_id)
     name = request.POST.get('order_name')
     quantity = request.POST.get('order_quantity')
-    # Pashmam az in khat code!!!!!
-    order.isOrders = True
     order.name = name
     order.quantity = quantity
     order.save()
@@ -87,7 +76,3 @@ def delete_order(request, order_id):
     order = Orders.objects.filter(id=order_id).delete()
     return redirect('orders')
 
-
-
-# def completed_orders():
-    return
