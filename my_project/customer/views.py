@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-import customer
-from .models import Customer
+from .models import Customer 
+from orders.models import Orders
 from django.http import HttpResponse
 from django.template import loader
+from django.db.models import Sum
 
 def customers(request):
     customers = Customer.objects.all
@@ -24,10 +25,12 @@ def add_customer(request):
 
 
 def customer_detail(request, customer_id):
-    customer = Customer.objects.get(pk=customer_id)
+    orders = Orders.objects.filter(customer_id=customer_id)
+    order_numb = orders.aggregate(Sum("quantity"))
     template = loader.get_template('customer_base/customer_detail.html')
     context = {
-        'customer' : customer
+        'orders' : orders,
+        'order_numb' : order_numb,
     }
 
     return HttpResponse(template.render(context, request))
