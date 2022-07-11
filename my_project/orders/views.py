@@ -5,6 +5,8 @@ from .models import Orders
 from customer.models import Customer
 from pprint import pp, pprint
 from django.db.models import Sum
+from .utils import getOrders
+from rest_framework.decorators import api_view
 
 
 def orders(request):
@@ -15,7 +17,6 @@ def orders(request):
     template = loader.get_template('order_base/orders.html')
 
     return HttpResponse(template.render(context, request))
-
 
 def add_order(request):
     cs = Customer.objects.all()
@@ -34,7 +35,6 @@ def insert_order(request):
     order.quantity = quantity
     order.save()
     return redirect('orders')
-
 
 def order_detail(request, order_id):
     order = Orders.objects.get(pk=order_id)
@@ -62,7 +62,6 @@ def edit_order(request, order_id):
     template = loader.get_template('order_base/edit_order.html')
     return HttpResponse(template.render(context, request))
 
-
 def update_order(request, order_id):
     order = Orders.objects.get(pk=order_id)
     name = request.POST.get('order_name')
@@ -75,4 +74,8 @@ def update_order(request, order_id):
 def delete_order(request, order_id):
     order = Orders.objects.filter(id=order_id).delete()
     return redirect('orders')
+
+@api_view(['GET'])
+def orders(request):
+    return getOrders(request)
 

@@ -9,4 +9,5 @@ urlpatterns = [
     path('edit_customer/<int:customer_id>/', views.edit_customer, name='edit_customer'),
     path('update_customer/<int:customer_id>/', views.update_customer, name='update_customer'),
     path('delete_customer/<int:customer_id>/', views.delete_customer, name='delete_customer'),
+    path('api_customers/', views.customers, name='api_customers')
 ]
