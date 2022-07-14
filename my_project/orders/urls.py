@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import apis
 
 urlpatterns = [
     path('', views.orders, name='orders'),
@@ -10,5 +11,11 @@ urlpatterns = [
     path('customer_detail/<int:customer_id>/', views.customer_detail, name='customer_detail'),
     path('add_order/', views.add_order, name='add_order'),
     path('add_order/insert/', views.insert_order, name='insert'),
-    path('api_orders/', views.orders, name='api_orders')
+# api addresses
+    path('api/', apis.api_orders, name='api_orders'),
+    path('api/order_detail/<int:order_id>/', apis.order_detail, name='order_detail'),
+    path('api/edit_order/<int:order_id>/', apis.edit_order, name='edit_order'),
+    path('api/delete_order/<int:order_id>/', apis.delete_order, name='delete_order'),
+    path('api/customer_detail/<int:customer_id>/', apis.customer_detail, name='customer_detail'),
+    path('api/add_order/', apis.add_order, name='add_order'),
 ]

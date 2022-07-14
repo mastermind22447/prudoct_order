@@ -5,8 +5,8 @@ from .models import Orders
 from customer.models import Customer
 from pprint import pp, pprint
 from django.db.models import Sum
-from .utils import getOrders
-from rest_framework.decorators import api_view
+
+
 
 
 def orders(request):
@@ -74,8 +74,4 @@ def update_order(request, order_id):
 def delete_order(request, order_id):
     order = Orders.objects.filter(id=order_id).delete()
     return redirect('orders')
-
-@api_view(['GET'])
-def orders(request):
-    return getOrders(request)
 
